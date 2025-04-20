@@ -25,7 +25,7 @@ This practical and interactive system demonstrates real-world sensor and actuato
 | 4-Pin Wires | ![Screenshot 2025-04-20 144224](https://github.com/user-attachments/assets/7589a5c4-63b3-4051-ac8e-2d28da4efb8b) |
 
 ## 3. System Architecture Diagram
-[Insert diagram here]
-https://github.com/user-attachments/assets/92a6afa8-e5cb-4185-8855-45af09abadab
+![Diagram](https://github.com/user-attachments/assets/beb548db-850b-4456-8e89-a0c87996a08a)
+
 ## 4. GUI Mockup
 [Insert mockup image or description here]
