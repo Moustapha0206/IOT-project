@@ -26,6 +26,6 @@ This practical and interactive system demonstrates real-world sensor and actuato
 
 ## 3. System Architecture Diagram
 [Insert diagram here]
-
+https://github.com/user-attachments/assets/92a6afa8-e5cb-4185-8855-45af09abadab
 ## 4. GUI Mockup
 [Insert mockup image or description here]
