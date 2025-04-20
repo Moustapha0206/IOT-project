@@ -11,8 +11,8 @@ This practical and interactive system demonstrates real-world sensor and actuato
 
 ## 2. Hardware Inventory
 
-| Component | Description | Image |
-|:---------|:------------|:-----|
+| Component | Image |
+|:---------|:------------|
 | DHT-11 Sensor | ![Screenshot 2025-04-20 144122](https://github.com/user-attachments/assets/92a6afa8-e5cb-4185-8855-45af09abadab) |
 | DS18B20 Sensor | ![Screenshot 2025-04-20 144128](https://github.com/user-attachments/assets/402577be-fd5a-40c1-a751-28e186c7a314) |
 | Ultrasonic Distance Sensor |  ![Screenshot 2025-04-20 144133](https://github.com/user-attachments/assets/67aff068-1c8f-42f4-a75e-f8860a476b24) |
