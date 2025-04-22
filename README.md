@@ -38,6 +38,9 @@ The following mockup shows the user interface design of the BBQ Cooler Monitorin
   - Set custom **thresholds**
   - Enter **manual cooling mode**
   - Switch between **French and English** interface
+ 
 
-![gui_mockup](https://github.com/user-attachments/assets/d619b19a-c6fa-42a5-93d0-07d1d290e01f)
+  
+![gui_mockup](https://github.com/user-attachments/assets/70a54c77-60f1-4797-8139-8ef2a0c7715a)
+
 
