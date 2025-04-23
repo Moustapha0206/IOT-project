@@ -1,0 +1,177 @@
+
+<Button@Button>:
+    size_hint_x: None
+    width: 250
+    pos_hint: {"center_x": 0.5}
+    background_normal: ""
+    background_down: ""
+    background_color: 0, 0, 0, 0
+    canvas.before:
+        Color:
+            rgba: 0.8, 0.8, 0.8, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [12]
+
+<CoolerMonitorScreen>:
+    orientation: 'vertical'
+    padding: 45
+    spacing: 20
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: None
+        height: '130dp'
+        spacing: 10
+        Label:
+            text: "BBQ Cooler Monitoring System"
+            font_size: '22sp'
+            bold: True
+            color: 1, 1, 1, 1
+            halign: 'center'
+            text_size: self.width, None
+
+        BoxLayout:
+            size_hint_y: None
+            height: '90dp'
+            spacing: 15
+
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 10
+                spacing: 5
+                canvas.before:
+                    Color:
+                        rgba: 0.15, 0.15, 0.15, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                Image:
+                    source: "assets/thermometer_simple.png"
+                    size_hint_y: None
+                    height: 50
+                Label:
+                    text: "38.6°C"
+                    font_size: '16sp'
+                    bold: True
+                    color: 1, 1, 1, 1
+
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 10
+                spacing: 5
+                canvas.before:
+                    Color:
+                        rgba: 0.15, 0.15, 0.15, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                Image:
+                    source: "assets/humidity_icon.png"
+                    size_hint_y: None
+                    height: 50
+                Label:
+                    text: "52%"
+                    font_size: '16sp'
+                    bold: True
+                    color: 1, 1, 1, 1
+
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 10
+                spacing: 5
+                canvas.before:
+                    Color:
+                        rgba: 0.15, 0.15, 0.15, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+                Image:
+                    source: "assets/door-open.png"
+                    size_hint_y: None
+                    height: 50
+                Label:
+                    text: "OPEN"
+                    font_size: '16sp'
+                    bold: True
+                    color: 1, 1, 1, 1
+
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: '60dp'
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: 0.8, 0.2, 0.2, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [12]
+        BoxLayout:
+            size_hint_x: None
+            width: 60
+            padding: [20, 0, 0, 0]
+            Image:
+                source: "assets/exclamation.png"
+                size_hint_x: None
+                width: 40
+        Label:
+            text: "TEMPERATURE TOO HIGH"
+            font_size: '16sp'
+            bold: True
+            color: 1, 1, 1, 1
+
+    BoxLayout:
+        spacing: 10
+        size_hint_y: None
+        height: '50dp'
+        canvas.before:
+            Color:
+                rgba: 0.15, 0.15, 0.15, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [10]
+        BoxLayout:
+            size_hint_x: None
+            width: 60
+            padding: [20, 0, 0, 0]
+            Image:
+                source: "assets/bell.png"
+                size_hint_x: None
+                width: 40
+        Label:
+            text: "Cooler lid is open"
+            font_size: '15sp'
+            bold: True
+            color: 1, 1, 1, 1
+
+    Button:
+        text: "Set Thresholds"
+        size_hint_y: None
+        height: '45dp'
+        color: 0, 0, 0, 1
+        bold: True
+
+    Button:
+        text: "Manual Cool Mode"
+        size_hint_y: None
+        height: '45dp'
+        color: 0, 0, 0, 1
+        bold: True
+
+    Button:
+        text: "Language: FR / EN"
+        size_hint_y: None
+        height: '30dp'
+        font_size: '12sp'
+        color: 0, 0, 0, 1
+        bold: True
