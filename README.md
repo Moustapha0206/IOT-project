@@ -28,4 +28,19 @@ This practical and interactive system demonstrates real-world sensor and actuato
 ![Diagram](https://github.com/user-attachments/assets/beb548db-850b-4456-8e89-a0c87996a08a)
 
 ## 4. GUI Mockup
-[Insert mockup image or description here]
+
+The following mockup shows the user interface design of the BBQ Cooler Monitoring System. It includes:
+
+- Dispalay in real time of **temperature**, **humidity**, and **door status**.
+- Visual alerts: a red warning panel appears when the temperature exceeds safe thresholds.
+- An alert for the **cooler lid** if left open too long (triggers buzzer).
+- Action buttons to:
+  - Set custom **thresholds**
+  - Enter **manual cooling mode**
+  - Switch between **French and English** interface
+ 
+
+  
+![gui_mockup](https://github.com/user-attachments/assets/70a54c77-60f1-4797-8139-8ef2a0c7715a)
+
+
