@@ -1,19 +1,24 @@
-
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.lang import Builder
 
+# Set fixed window size for the GUI
 Window.size = (450, 550)
 
+# Load KV layout file
 Builder.load_file("gui.kv")
 
+# Main layout for the app screen
 class CoolerMonitorScreen(BoxLayout):
     pass
 
+# Entry point for the Kivy application
 class CoolerApp(App):
     def build(self):
         return CoolerMonitorScreen()
+
+
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
@@ -33,29 +38,30 @@ from gpiozero import DistanceSensor, LED, Buzzer
 from gpiozero.exc import DistanceSensorNoEcho
 from threading import Thread
 
-# Set window size
+# Set fixed window size again for consistency
 Window.size = (450, 550)
 
-# Load KV layout
+# Load UI layout from KV file
 Builder.load_file("gui.kv")
 
-# DS18B20 Setup
+# Setup for DS18B20 temperature sensor
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
 base_dir = '/sys/bus/w1/devices/'
 device_folder = glob.glob(base_dir + '28*')[0]
 device_file = device_folder + '/w1_slave'
 
-# DHT11 on GPIO17
+# DHT11 sensor initialized on GPIO17
 dht_device = adafruit_dht.DHT11(board.D17)
 
-# Ultrasonic Sensor Setup
+# Ultrasonic sensor for lid status detection (trigger: GPIO20, echo: GPIO21)
 lid_sensor = DistanceSensor(echo=21, trigger=20, max_distance=1, queue_len=1)
 
-# Actuators
+# Output actuators
 status_led = LED(18)
 buzzer = Buzzer(22)
 
+# Function to read and return temperature from DS18B20
 def read_temp():
     try:
         with open(device_file, 'r') as f:
@@ -68,11 +74,13 @@ def read_temp():
         if equals_pos != -1:
             return float(lines[1][equals_pos + 2:]) / 1000.0
     except Exception as e:
-        print("âŒ Temperature read error:", e)
+        print("Temperature read error:", e)
     return 0
 
+# Main app logic and screen controller
 class CoolerMonitorScreen(BoxLayout):
-    temp_label_text = StringProperty("--Â°C")
+    # UI-bound properties for dynamic updates
+    temp_label_text = StringProperty("--°C")
     humidity_label_text = StringProperty("--%")
     temp_label_color = ListProperty([1, 1, 1, 1])
     temp_high_alert_visible = BooleanProperty(0)
@@ -84,13 +92,16 @@ class CoolerMonitorScreen(BoxLayout):
     button_threshold_text = StringProperty("")
     button_manual_cool_text = StringProperty("")
 
+    # Threshold values
     max_temp_threshold = NumericProperty(30)
     min_temp_threshold = NumericProperty(20)
     max_humidity_threshold = NumericProperty(70)
     min_humidity_threshold = NumericProperty(40)
 
+    # Manual cooling state
     manual_cool_active = BooleanProperty(False)
 
+    # Translations for multilingual UI
     translations = {
         "en": {
             "temp_normal": "Temperature is normal.",
@@ -106,16 +117,16 @@ class CoolerMonitorScreen(BoxLayout):
             "manual_cool_btn": "Manual Cool Mode"
         },
         "fr": {
-            "temp_normal": "TempÃ©rature normale.",
-            "temp_high": "TEMPÃ‰RATURE TROP Ã‰LEVÃ‰E",
-            "temp_low": "TEMPÃ‰RATURE TROP BASSE",
-            "lid_closed": "Couvercle fermÃ©",
+            "temp_normal": "Température normale.",
+            "temp_high": "TEMPÉRATURE TROP ÉLEVÉE",
+            "temp_low": "TEMPÉRATURE TROP BASSE",
+            "lid_closed": "Couvercle fermé",
             "lid_open": "Couvercle ouvert",
-            "lid_unknown": "Ã‰tat du couvercle inconnu",
+            "lid_unknown": "État du couvercle inconnu",
             "manual_cool": "Mode Refroidissement Manuel Actif",
             "language_button": "Langue : EN / FR",
-            "header": "SystÃ¨me de surveillance du rÃ©frigÃ©rateur",
-            "set_thresholds": "DÃ©finir les seuils",
+            "header": "Système de surveillance du réfrigérateur",
+            "set_thresholds": "Définir les seuils",
             "manual_cool_btn": "Mode de refroidissement manuel"
         }
     }
@@ -130,6 +141,7 @@ class CoolerMonitorScreen(BoxLayout):
         Clock.schedule_interval(self.update_sensors, 2)
         Thread(target=self.lid_distance_loop, daemon=True).start()
 
+    # Background loop to continuously read lid distance
     def lid_distance_loop(self):
         while True:
             try:
@@ -138,10 +150,11 @@ class CoolerMonitorScreen(BoxLayout):
             except DistanceSensorNoEcho:
                 self.lid_distance = None
             except Exception as e:
-                print("âŒ Distance thread error:", e)
+                print(" Distance thread error:", e)
                 self.lid_distance = None
             time.sleep(1)
 
+    # Update text labels based on selected language
     def update_translations(self):
         t = self.translations[self.language]
         self.temp_message = t["temp_normal"]
@@ -153,14 +166,16 @@ class CoolerMonitorScreen(BoxLayout):
         if hasattr(self, "ids") and "language_btn" in self.ids:
             self.ids.language_btn.text = t["language_button"]
 
+    # Toggle between English and French
     def toggle_language(self):
         self.language = "fr" if self.language == "en" else "en"
         self.update_translations()
 
+    # Periodic update of temperature, humidity, lid status, and LED
     def update_sensors(self, dt):
         t = self.translations[self.language]
         temperature = read_temp()
-        self.temp_label_text = f"{temperature:.2f}Â°C"
+        self.temp_label_text = f"{temperature:.2f}°C"
         if temperature > self.max_temp_threshold:
             self.temp_label_color = [1, 0, 0, 1]
             self.temp_high_alert_visible = True
@@ -174,6 +189,7 @@ class CoolerMonitorScreen(BoxLayout):
             self.temp_high_alert_visible = False
             self.temp_message = t["temp_normal"]
 
+        # Read humidity from DHT11 sensor
         humidity = None
         try:
             humidity = dht_device.humidity
@@ -184,9 +200,10 @@ class CoolerMonitorScreen(BoxLayout):
         except RuntimeError:
             self.humidity_label_text = "--%"
         except Exception as e:
-            print("âŒ Humidity error:", e)
+            print("Humidity error:", e)
             self.humidity_label_text = "--%"
 
+        # Check cooler lid status using distance reading
         try:
             distance = self.lid_distance
             if distance is None:
@@ -203,10 +220,11 @@ class CoolerMonitorScreen(BoxLayout):
                     t["lid_closed"] if new_status == "CLOSED" else t["lid_open"]
                 )
         except Exception as e:
-            print("âŒ Lid logic error:", e)
+            print("Lid logic error:", e)
             self.door_status_text = "UNKNOWN"
             self.lid_status_message = t["lid_unknown"]
 
+        # Control LED based on ideal conditions or manual override
         try:
             if self.manual_cool_active:
                 status_led.on()
@@ -218,9 +236,10 @@ class CoolerMonitorScreen(BoxLayout):
             else:
                 status_led.off()
         except Exception as e:
-            print("âŒ LED control error:", e)
+            print("LED control error:", e)
             status_led.off()
 
+    # Activate or deactivate manual cool mode
     def toggle_manual_cool(self):
         t = self.translations[self.language]
         if not self.manual_cool_active:
@@ -231,14 +250,17 @@ class CoolerMonitorScreen(BoxLayout):
         else:
             self.deactivate_manual_cool()
 
+    # Turn off manual cool mode after timeout or toggle
     def deactivate_manual_cool(self, *args):
         self.manual_cool_active = False
         self.manual_cool_message = ""
         status_led.off()
 
+    # Popup window to change temperature/humidity thresholds
     def open_threshold_popup(self):
         layout = BoxLayout(orientation='vertical', spacing=10, padding=10)
 
+        # Helper to create label input unit row
         def labeled_input(label_text, default_value, unit):
             row = BoxLayout(orientation='horizontal', spacing=5)
             input_field = TextInput(text=str(default_value), input_filter='float', multiline=False)
@@ -247,11 +269,13 @@ class CoolerMonitorScreen(BoxLayout):
             row.add_widget(Label(text=unit))
             return row, input_field
 
-        tmax_row, temp_max_input = labeled_input("Max Temp", self.max_temp_threshold, "Â°C")
-        tmin_row, temp_min_input = labeled_input("Min Temp", self.min_temp_threshold, "Â°C")
+        # Create labeled input rows
+        tmax_row, temp_max_input = labeled_input("Max Temp", self.max_temp_threshold, "°C")
+        tmin_row, temp_min_input = labeled_input("Min Temp", self.min_temp_threshold, "°C")
         hmax_row, humidity_max_input = labeled_input("Max Humidity", self.max_humidity_threshold, "%")
         hmin_row, humidity_min_input = labeled_input("Min Humidity", self.min_humidity_threshold, "%")
 
+        # Apply button logic to validate and save thresholds
         def apply_changes(instance):
             try:
                 t_max = float(temp_max_input.text)
@@ -275,6 +299,7 @@ class CoolerMonitorScreen(BoxLayout):
             except ValueError:
                 Popup(title="Error", content=Label(text="Enter valid numbers"), size_hint=(0.7, 0.3)).open()
 
+        # Assemble popup layout
         layout.add_widget(Label(text="Set Thresholds", bold=True))
         layout.add_widget(tmax_row)
         layout.add_widget(tmin_row)
@@ -285,6 +310,7 @@ class CoolerMonitorScreen(BoxLayout):
         popup = Popup(title="Set Alert Thresholds", content=layout, size_hint=(0.9, 0.9))
         popup.open()
 
+    # Load threshold values from configuration file
     def load_thresholds(self):
         try:
             if os.path.exists("thresholds.cfg"):
@@ -299,13 +325,13 @@ class CoolerMonitorScreen(BoxLayout):
         except Exception as e:
             print("Could not load thresholds:", e)
 
+# Application entry point
 class CoolerApp(App):
     def build(self):
         return CoolerMonitorScreen()
 
+# Start the application
 if __name__ == '__main__':
     CoolerApp().run()
 
 
-if __name__ == '__main__':
-    CoolerApp().run()
