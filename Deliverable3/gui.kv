@@ -1,0 +1,213 @@
+<CoolerMonitorScreen>:
+    orientation: 'vertical'
+    padding: 45
+    spacing: 20
+    canvas.before:
+        Color:
+            rgba: 0.1, 0.1, 0.1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    # Header
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: None
+        height: '130dp'
+        spacing: 10
+        Label:
+            text: root.header_text
+            font_size: '22sp'
+            bold: True
+            color: 1, 1, 1, 1
+            halign: 'center'
+            text_size: self.width, None
+
+    # Temperature / Humidity / Door
+    BoxLayout:
+        size_hint_y: None
+        height: '90dp'
+        spacing: 15
+
+        # Temperature Box
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 10
+            spacing: 5
+            canvas.before:
+                Color:
+                    rgba: 0.15, 0.15, 0.15, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Image:
+                source: "assets/thermometer_simple.png"
+                size_hint_y: None
+                height: 50
+            Label:
+                text: root.temp_label_text
+                font_size: '16sp'
+                bold: True
+                color: root.temp_label_color
+
+        # Humidity Box
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 10
+            spacing: 5
+            canvas.before:
+                Color:
+                    rgba: 0.15, 0.15, 0.15, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Image:
+                source: "assets/humidity_icon.png"
+                size_hint_y: None
+                height: 50
+            Label:
+                text: root.humidity_label_text
+                font_size: '16sp'
+                bold: True
+                color: 1, 1, 1, 1
+
+        # Door Box
+        BoxLayout:
+            orientation: 'vertical'
+            padding: 10
+            spacing: 5
+            canvas.before:
+                Color:
+                    rgba: 0.15, 0.15, 0.15, 1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            Image:
+                source: "assets/door-open.png"
+                size_hint_y: None
+                height: 50
+            Label:
+                text: root.door_status_text
+                font_size: '16sp'
+                bold: True
+                color: 1, 1, 1, 1
+
+    # Alert Message Box (Always visible)
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint_y: None
+        height: '60dp'
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: 0.8, 0.2, 0.2, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [12]
+        BoxLayout:
+            size_hint_x: None
+            width: 60
+            padding: [20, 0, 0, 0]
+            Image:
+                source: "assets/exclamation.png"
+                size_hint_x: None
+                width: 40
+        Label:
+            text: root.temp_message
+            font_size: '16sp'
+            bold: True
+            color: 1, 1, 1, 1
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+
+    # Cooler lid status box (dynamic)
+    BoxLayout:
+        spacing: 10
+        size_hint_y: None
+        height: '50dp'
+        canvas.before:
+            Color:
+                rgba: 0.15, 0.15, 0.15, 1
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [10]
+        BoxLayout:
+            size_hint_x: None
+            width: 60
+            padding: [20, 0, 0, 0]
+            Image:
+                source: "assets/bell.png" if root.door_status_text == "OPEN" else "assets/check.png"
+                size_hint_x: None
+                width: 40
+        Label:
+            text: root.lid_status_message
+            font_size: '15sp'
+            bold: True
+            color: 1, 1, 1, 1
+
+    # Buttons
+    Button:
+        text: root.button_threshold_text
+        on_release: root.open_threshold_popup()
+        size_hint_y: None
+        height: '45dp'
+        background_normal: ""
+        background_color: 0.8, 0.8, 0.8, 1
+        color: 0, 0, 0, 1
+        bold: True
+        canvas.before:
+            Color:
+                rgba: self.background_color
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [50]
+
+    Button:
+        text: root.button_manual_cool_text
+        on_release: root.toggle_manual_cool()
+        size_hint_y: None
+        height: '45dp'
+        background_normal: ""
+        background_color: 0.8, 0.8, 0.8, 1
+        color: 0, 0, 0, 1
+        bold: True
+        canvas.before:
+            Color:
+                rgba: self.background_color
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [10]
+
+    Label:
+        text: root.manual_cool_message
+        font_size: '14sp'
+        size_hint_y: None
+        height: '30dp'
+        color: 0.6, 1, 0.6, 1
+        bold: True
+        halign: 'center'
+        text_size: self.size
+
+    Button:
+        id: language_btn
+        text: "Language: FR / EN"
+        on_release: root.toggle_language()
+        size_hint_y: None
+        height: '30dp'
+        font_size: '12sp'
+        background_normal: ""
+        background_color: 0.8, 0.8, 0.8, 1
+        color: 0, 0, 0, 1
+        bold: True
+        canvas.before:
+            Color:
+                rgba: self.background_color
+            RoundedRectangle:
+                pos: self.pos
+                size: self.size
+                radius: [10]
